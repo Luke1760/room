@@ -11,13 +11,26 @@ RSpec.describe CoursesController do
       expect(assigns[:courses]).to eq([course1, course2])
     end
 
+  describe "GET show" do
+    it "assigns @course" do
+      course = create(:course)
+
+      get :show, params: { id: course.id}
+
+      expect(assigns[:course]).to eq(course)
+    end
+  end
+
     it "render template" do
       course1 = create(:course)
       course2 = create(:course)
+      course = create(:course)
 
-      get :index
+      get :show, params: {id: course.id}
+      # get :index
 
-      expect(response).to render_template("index")
+      # expect(response).to render_template("index")
+      expect(response).to render_template("show")
     end
   end
 end

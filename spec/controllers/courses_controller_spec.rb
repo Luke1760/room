@@ -21,16 +21,30 @@ RSpec.describe CoursesController do
     end
   end
 
+  describe "GET new" do
+    it "assign @course" do
+      course = build(:course)
+
+      get :new
+
+      expect(assigns(:course)).to be_a_new(Course)
+    end
+  end
+
     it "render template" do
       course1 = create(:course)
       course2 = create(:course)
       course = create(:course)
-
-      get :show, params: {id: course.id}
+      course = build(:course)
+      
       # get :index
+      # get :show, params: {id: course.id}
+      get :new
+      
 
       # expect(response).to render_template("index")
-      expect(response).to render_template("show")
+      # expect(response).to render_template("show")
+      expect(response).to render_template("new")
     end
   end
 end

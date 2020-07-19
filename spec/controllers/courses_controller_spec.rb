@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe CoursesController do
-  describe "GET index" do
+  describe "#index" do
     it "assigns @courses" do
       course1 = create(:course)
       course2 = create(:course)
@@ -21,7 +21,7 @@ RSpec.describe CoursesController do
     end
   end
 
-  describe "GET show" do 
+  describe "#show" do 
     it "assigns @course" do
       course = create(:course)
 
@@ -39,7 +39,7 @@ RSpec.describe CoursesController do
     end
   end
 
-  describe "GET new" do
+  describe "#new" do
     it "assigns @course" do
       course = build(:course)
       # course = Course.new 也可
@@ -59,19 +59,29 @@ RSpec.describe CoursesController do
     end
   end
 
-  describe "POST create" do
-    it "create a new course record" do
-      course = build(:course)
-
+  describe "#create" do
+    it "can't create a new record when course title is blank" do 
       expect do 
-        post :create, params: { :course => attributes_for(:course) }
-      end.to change{ Course.count }.by(1)
+        post :create, params: { course: { :description => "bar"}}
+      end.to change { Course.count }.by(0)
     end
 
-    it "redirects_to courses_path" do 
+    it "render new template when course title is blank" do
+      post :create, params: { course: { :description => "bar"}}
+
+      expect(response).to render_template("new")
+    end
+
+    it "create a new course record when course title is exist" do
       course = build(:course)
 
-      post :create, params: { :course => attributes_for(:course) }
+      expect do
+        post :create, params: {course: attributes_for(:course) }
+      end.to change { Course.count }.by(1)
+    end
+
+    it "redirect_to courses_path when course title is exist" do
+      post :create, params: { course: attributes_for(:course) }
 
       expect(response).to redirect_to courses_path
     end

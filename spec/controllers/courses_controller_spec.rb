@@ -42,6 +42,7 @@ RSpec.describe CoursesController do
   describe "GET new" do
     it "assigns @course" do
       course = build(:course)
+      # course = Course.new 也可
 
       get :new
 
@@ -50,10 +51,29 @@ RSpec.describe CoursesController do
 
     it "render template" do
       course = build(:course)
+      # course = Course.new 也可
 
       get :new
 
       expect(response).to render_template("new")
+    end
+  end
+
+  describe "POST create" do
+    it "create a new course record" do
+      course = build(:course)
+
+      expect do 
+        post :create, params: { :course => attributes_for(:course) }
+      end.to change{ Course.count }.by(1)
+    end
+
+    it "redirects_to courses_path" do 
+      course = build(:course)
+
+      post :create, params: { :course => attributes_for(:course) }
+
+      expect(response).to redirect_to courses_path
     end
   end
 end
